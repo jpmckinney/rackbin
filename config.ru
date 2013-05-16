@@ -28,9 +28,13 @@ helpers do
     end
   end
 
+  # Pusher has a maximum message length of 10kB (PubNub is 1800 bytes).
+  # @see http://www.pubnub.com/tutorial/developer-intro-tutorial
+  # @see https://pusher.tenderapp.com/kb/publishingtriggering-events/what-is-the-message-size-limit-when-publishing-a-message
   def push(content)
-    p request.body.read
-    Pusher[@channel].trigger('post', :content => (content + ['', request.body.read]).join("\r\n"))
+    (content + ['', request.body.read]).join("\r\n").chars.each_slice(10_000).each_with_index do |chars,index|
+      Pusher[@channel].trigger(index.zero? ? 'begin' : 'continue', :content => chars.join)
+    end
   end
 end
 
@@ -76,8 +80,11 @@ __END__
 <script>
 var pusher = new Pusher('<%= Pusher.key %>');
 var channel = pusher.subscribe('<%= @channel %>');
-channel.bind('post', function (data) {
+channel.bind('begin', function (data) {
   document.write('<hr><pre>' + data.content + '</pre>');
+});
+channel.bind('continue', function (data) {
+  document.write('<pre>' + data.content + '</pre>');
 });
 </script>
 </head>
