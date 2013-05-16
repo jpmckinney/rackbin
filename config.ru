@@ -30,7 +30,7 @@ end
 run Sinatra::Application
 
 __END__
-@@ layout
+@@layout
 <!DOCTYPE html>
 <html>
 <head>
@@ -54,7 +54,9 @@ channel.bind('post', function (data) {
 </script>
 </head>
 <body>
+<%= yield %>
 </body>
 </html>
 
-@@ index
+@@index
+<p>Waiting for requests...</p>
