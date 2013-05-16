@@ -24,7 +24,7 @@
 
 * You can POST and listen for requests at any URL path. For example, `/foo` displays only POSTs to `/foo`, making it easy to isolate requests from different services.
 * `/rack` is a special route that displays HTTP headers as environment variables (and displays only POSTs to `/rack`). Useful if you are testing webhooks to be consumed by Rack apps.
-* Rackbin is less than 100 lines of code, all in `config.ru`, making it easy to tailor to your needs.
+* Rackbin is less than 100 lines of code, all in [`config.ru`](https://github.com/opennorth/rackbin/blob/master/config.ru), making it easy to tailor to your needs.
 
 ## Why?
 
@@ -34,8 +34,8 @@ In most cases, you are probably better served by [Requestb.in](http://requestb.i
 
 ## Caveats
 
-* RackBin uses [Pusher](http://pusher.com/), which sends messages in 10kB chunks. Sending a large POST (>1MB) is therefore not recommended. Pusher is used to avoid database maintenance. Rackbin stores no data.
-* URL paths should contain only upper- and lowercase letters, numbers and the following punctuation: `_ - = @ , . ;` (due to Pusher's restrictions). The `/` path separator will be converted to `_`. All other characters will be ignored. As such, `/foo!` displays the same POSTs as `/foo`.
+* RackBin uses [Pusher](http://pusher.com/), which sends messages in 10kB chunks. Sending a large POST (>1MB) is therefore not recommended. (Pusher is used to avoid database maintenance. Rackbin stores no data.)
+* URL paths should contain only upper- and lowercase letters, numbers and the following punctuation `_ - = @ , . ;` due to Pusher restrictions. The `/` path separator is converted to `_`. All other characters are ignored. As such, `/foo!` displays the same POSTs as `/foo`.
 * `/requests` is the default bin, therefore `/` display the same POSTs as `/requests`.
 
 ## Bugs? Questions?
