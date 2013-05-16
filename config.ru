@@ -17,7 +17,7 @@ helpers do
     @channel = if params[:splat].empty?
       'requests'
     else
-      params[:splat].gsub('/', '_').gsub(/[^A-Za-z0-9,.;=@_-]/, '')
+      params[:splat].join.gsub('/', '_').gsub(/[^A-Za-z0-9,.;=@_-]/, '')
     end
   end
 
@@ -46,6 +46,14 @@ post '/*' do
     "#{key.sub(/\AHTTP_/, '').gsub('_', '-').downcase.gsub(/\b([a-z])/) {$1.capitalize}}: #{value}"
   end
   push(content)
+end
+
+get '/robots.txt' do
+  "User-agent: *\nDisallow: /'
+end
+
+get '/favicon.ico' do
+  204
 end
 
 get '/*' do
