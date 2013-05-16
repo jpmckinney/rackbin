@@ -81,11 +81,11 @@ __END__
 var pusher = new Pusher('<%= Pusher.key %>');
 var channel = pusher.subscribe('<%= @channel %>');
 channel.bind('begin', function (data) {
-  document.write('<hr><pre>' + data.content + '</pre>');
+  document.write('<hr><pre>' + data.content.replace(/&/g, '&amp;') + '</pre>');
 });
 channel.bind('continue', function (data) {
   var tags = document.getElementsByTagName('pre');
-  tags[tags.length - 1].innerHTML += data.content;
+  tags[tags.length - 1].innerHTML += data.content.replace(/&/g, '&amp;');
 });
 </script>
 </head>
