@@ -40,6 +40,11 @@ get '/' do
   erb :index
 end
 
+# Some providers, like Mandrill, get upset if the bin doesn't respond to GET.
+get '/rack' do
+  204
+end
+
 run Sinatra::Application
 
 __END__
