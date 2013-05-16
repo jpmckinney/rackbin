@@ -4,7 +4,8 @@ require 'bundler/setup'
 require 'pusher'
 require 'sinatra'
 
-# Heroku will set PUSHER_URL.
+# Heroku will set PUSHER_URL and PUSHER_SOCKET_URL. If you are running Rackbin
+# in development, set the environment variables below before running `rackup`.
 unless ENV['PUSHER_URL']
   Pusher.app_id = ENV['PUSHER_APP_ID']
   Pusher.key    = ENV['PUSHER_KEY']
@@ -16,7 +17,7 @@ helpers do
   def set_channel
     path = params[:splat].join
     @channel = if path.empty?
-      'requests'
+      'requests' # default
     else
       path.gsub('/', '_').gsub(/[^A-Za-z0-9,.;=@_-]/, '')
     end
