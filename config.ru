@@ -29,6 +29,7 @@ helpers do
   end
 
   def push(content)
+    p request.body.read
     Pusher[@channel].trigger('post', :content => (content + ['', request.body.read]).join("\r\n"))
   end
 end
