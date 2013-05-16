@@ -23,6 +23,19 @@ post '/' do
   Pusher['requests'].trigger('post', :raw => raw.join("\r\n"))
 end
 
+# If you want to see the keys used by Rack.
+post '/rack' do
+  raw = request.env.select do |key,_|
+    key[/\AHTTP_/]
+  end.map do |key,value|
+    "#{key}: #{value}"
+  end
+
+  raw += ['', request.body.read]
+
+  Pusher['requests'].trigger('post', :raw => raw.join("\r\n"))
+end
+
 get '/' do
   erb :index
 end
