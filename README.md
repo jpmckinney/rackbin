@@ -20,6 +20,12 @@
 
 * POST requests to your bin's URL
 
+## Features
+
+* `/` and `/requests` display all POSTs
+* `/foo` displays only POSTs to `/foo`, making it easy to isolate requests from different sources
+* `/rack` displays HTTP headers as environment variables (and displays only POSTs to `/rack`)
+
 ## Bugs? Questions?
 
 This project's main repository is on GitHub: [http://github.com/opennorth/rackbin](http://github.com/opennorth/rackbin), where your contributions, forks, bug reports, feature requests, and feedback are greatly welcomed.
