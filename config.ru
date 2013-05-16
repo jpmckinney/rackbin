@@ -11,23 +11,25 @@ unless ENV['PUSHER_URL']
   Pusher.secret = ENV['PUSHER_SECRET']
 end
 
-# @see http://pusher.com/docs/client_api_guide/client_channels#naming-channels
-def set_channel
-  @channel = if params[:splat].empty?
-    'requests'
-  else
-    params[:splat].gsub('/', '_').gsub(/[^A-Za-z0-9,.;=@_-]/, '')
+helpers do
+  # @see http://pusher.com/docs/client_api_guide/client_channels#naming-channels
+  def set_channel
+    @channel = if params[:splat].empty?
+      'requests'
+    else
+      params[:splat].gsub('/', '_').gsub(/[^A-Za-z0-9,.;=@_-]/, '')
+    end
   end
-end
 
-def http_headers
-  request.env.select do |key,_|
-    key[/\AHTTP_/]
+  def http_headers
+    request.env.select do |key,_|
+      key[/\AHTTP_/]
+    end
   end
-end
 
-def push(content)
-  Pusher[@channel].trigger('post', :content => (content + ['', request.body.read]).join("\r\n"))
+  def push(content)
+    Pusher[@channel].trigger('post', :content => (content + ['', request.body.read]).join("\r\n"))
+  end
 end
 
 post '/rack' do
