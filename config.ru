@@ -49,7 +49,7 @@ post '/*' do
 end
 
 get '/robots.txt' do
-  "User-agent: *\nDisallow: /'
+  "User-agent: *\nDisallow: /"
 end
 
 get '/favicon.ico' do
