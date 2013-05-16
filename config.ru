@@ -30,7 +30,6 @@ def push(content)
   Pusher[@channel].trigger('post', :content => (content + ['', request.body.read]).join("\r\n"))
 end
 
-# If you want to see the keys used by Rack.
 post '/rack' do
   @channel = 'rack'
   content = http_headers.map do |key,value|
@@ -47,7 +46,6 @@ post '/*' do
   push(content)
 end
 
-# Some providers, like Mandrill, get upset if the bin doesn't respond to GET.
 get '/*' do
   set_channel
   erb :index
