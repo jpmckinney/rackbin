@@ -24,7 +24,7 @@ helpers do
 
   def http_headers
     request.env.select do |key,_|
-      key[/\AHTTP_/]
+      key[/\A(?:HTTP_|CONTENT_)/]
     end
   end
 
