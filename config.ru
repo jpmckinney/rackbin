@@ -84,7 +84,8 @@ channel.bind('begin', function (data) {
   document.write('<hr><pre>' + data.content + '</pre>');
 });
 channel.bind('continue', function (data) {
-  document.write('<pre>' + data.content + '</pre>');
+  var tags = document.getElementsByTagName('pre');
+  tags[tags.length - 1].innerHTML += data.content;
 });
 </script>
 </head>
