@@ -51,4 +51,4 @@ channel.bind('post', function (data) {
 </html>
 
 @@index
-<p>Waiting for requests...</p>
+<p>Send a POST request to this URL to start!</p>
