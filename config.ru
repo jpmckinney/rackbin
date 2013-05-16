@@ -14,10 +14,11 @@ end
 helpers do
   # @see http://pusher.com/docs/client_api_guide/client_channels#naming-channels
   def set_channel
-    @channel = if params[:splat].empty?
+    path = params[:splat].join
+    @channel = if path.empty?
       'requests'
     else
-      params[:splat].join.gsub('/', '_').gsub(/[^A-Za-z0-9,.;=@_-]/, '')
+      path.gsub('/', '_').gsub(/[^A-Za-z0-9,.;=@_-]/, '')
     end
   end
 
@@ -73,7 +74,7 @@ __END__
 <script src="//js.pusher.com/2.0/pusher.min.js"></script>
 <script>
 var pusher = new Pusher('<%= Pusher.key %>');
-var channel = pusher.subscribe(<%= @channel %>);
+var channel = pusher.subscribe('<%= @channel %>');
 channel.bind('post', function (data) {
   document.write('<hr><pre>' + data.content + '</pre>');
 });
