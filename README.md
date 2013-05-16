@@ -22,9 +22,10 @@
 
 ## Features
 
-* `/` and `/requests` display all POSTs
 * `/foo` displays only POSTs to `/foo`, making it easy to isolate requests from different sources
 * `/rack` displays HTTP headers as environment variables (and displays only POSTs to `/rack`)
+
+Note that `/` and `/requests` display POSTs to `/` or `/requests`.
 
 ## Bugs? Questions?
 
