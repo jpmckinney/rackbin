@@ -1,6 +1,6 @@
 # Rackbin: The simplest possible Rack postbin
 
-[Requestb.in](http://requestb.in/) is great, except it limits requests to 10,240 bytes, and you can't choose your URL path. This postbin, or "requestbin", is easy to install, has no limits and uses any URL path. Just open your bin's URL and wait for the requests!
+[Requestb.in](http://requestb.in/) is great, except it limits requests to 10,240 bytes, and you can't choose your URL path. This postbin, or "requestbin", is easy to install and customize, has no limits and uses any URL path. Just open your bin's URL and wait for the requests!
 
 ## Getting Started
 
