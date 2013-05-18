@@ -23,7 +23,7 @@
 ## Features
 
 * You can POST and listen for requests at any URL path. For example, `/foo` displays only POST requests to `/foo`, making it easy to isolate requests from different services.
-* `/rack` is a special route that displays HTTP headers as environment variables (and displays only POST requests to `/rack`). Useful if you are testing webhooks to be consumed by Rack apps.
+* `/rack` is a special path that displays HTTP headers as environment variables (and displays only POST requests to `/rack`). Useful if you are testing webhooks to be consumed by Rack apps.
 * Rackbin is less than 100 lines of code, all in [`config.ru`](https://github.com/opennorth/rackbin/blob/master/config.ru), making it easy to tailor to your needs.
 
 ## Why?
