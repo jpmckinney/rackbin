@@ -33,6 +33,10 @@ helpers do
   # @see http://www.pubnub.com/tutorial/developer-intro-tutorial
   # @see https://pusher.tenderapp.com/kb/publishingtriggering-events/what-is-the-message-size-limit-when-publishing-a-message
   def push(content)
+    path = params[:splat].join
+    if Encoding.list.map(&:name).include?(path)
+      content = content.encode(path)
+    end
     (content + ['', request.body.read]).join("\r\n").chars.each_slice(10_000).each_with_index do |chars,index|
       Pusher[@channel].trigger(index.zero? ? 'begin' : 'continue', :content => chars.join)
     end
