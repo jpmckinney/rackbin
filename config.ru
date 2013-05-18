@@ -33,12 +33,10 @@ helpers do
   # @see http://www.pubnub.com/tutorial/developer-intro-tutorial
   # @see https://pusher.tenderapp.com/kb/publishingtriggering-events/what-is-the-message-size-limit-when-publishing-a-message
   def push(headers)
-    body = request.body.read
-    message = (headers + ['', body]).join("\r\n")
+    message = (headers + ['', request.body.read]).join("\r\n")
 
-    path = params[:splat].join
-    if Encoding.list.map(&:name).include?(path)
-      message = message.force_encoding(path)
+    if Encoding.list.map(&:name).include?(@channel)
+      message = message.force_encoding(@channel)
     end
 
     message.chars.each_slice(10_000).each_with_index do |chars,index|

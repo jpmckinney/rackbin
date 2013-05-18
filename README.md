@@ -25,7 +25,7 @@
 * You can POST and listen for requests at any URL path. For example, `/foo` displays only POST requests to `/foo`, making it easy to isolate requests from different services.
 * `/rack` is a special path that displays HTTP headers as environment variables (and displays only POST requests to `/rack`). Useful if you are testing webhooks to be consumed by Rack apps.
 * Rackbin is less than 100 lines of code, all in [`config.ru`](https://github.com/opennorth/rackbin/blob/master/config.ru), making it easy to tailor to your needs.
-* If you must send non-ASCII, non-UTF-8 POST requests, send your request to the appropriate, case-sensitive path below:
+* If you must send non-ASCII, non-UTF-8 POST requests, send your request to the appropriate, case-sensitive path below (otherwise, RackBin will silently fail):
 
     ASCII-8BIT
     UTF-8
