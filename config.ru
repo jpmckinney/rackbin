@@ -32,12 +32,16 @@ helpers do
   # Pusher has a maximum message length of 10kB (PubNub is 1800 bytes).
   # @see http://www.pubnub.com/tutorial/developer-intro-tutorial
   # @see https://pusher.tenderapp.com/kb/publishingtriggering-events/what-is-the-message-size-limit-when-publishing-a-message
-  def push(content)
+  def push(headers)
+    body = request.body.read
+    message = (headers + ['', body]).join("\r\n")
+
     path = params[:splat].join
     if Encoding.list.map(&:name).include?(path)
-      content = content.encode(path)
+      message = message.encode(path)
     end
-    (content + ['', request.body.read]).join("\r\n").chars.each_slice(10_000).each_with_index do |chars,index|
+
+    message.chars.each_slice(10_000).each_with_index do |chars,index|
       Pusher[@channel].trigger(index.zero? ? 'begin' : 'continue', :content => chars.join)
     end
   end
@@ -45,18 +49,18 @@ end
 
 post '/rack' do
   @channel = 'rack'
-  content = http_headers.map do |key,value|
+  headers = http_headers.map do |key,value|
     "#{key}: #{value}"
   end
-  push(content)
+  push(headers)
 end
 
 post '/*' do
   set_channel
-  content = http_headers.map do |key,value|
+  headers = http_headers.map do |key,value|
     "#{key.sub(/\AHTTP_/, '').gsub('_', '-').downcase.gsub(/\b([a-z])/) {$1.capitalize}}: #{value}"
   end
-  push(content)
+  push(headers)
 end
 
 get '/robots.txt' do
