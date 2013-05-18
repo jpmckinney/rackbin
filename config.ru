@@ -38,7 +38,7 @@ helpers do
 
     path = params[:splat].join
     if Encoding.list.map(&:name).include?(path)
-      message = message.encode(path)
+      message = message.force_encoding(path)
     end
 
     message.chars.each_slice(10_000).each_with_index do |chars,index|
