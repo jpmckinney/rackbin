@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'bundler/setup'
 
+require 'mail'
 require 'pusher'
 require 'sinatra'
 
@@ -10,6 +11,19 @@ unless ENV['PUSHER_URL']
   Pusher.app_id = ENV['PUSHER_APP_ID']
   Pusher.key    = ENV['PUSHER_KEY']
   Pusher.secret = ENV['PUSHER_SECRET']
+end
+
+# @see https://devcenter.heroku.com/articles/sendgrid#mail
+Mail.defaults do
+  delivery_method :smtp, {
+    :address              => 'smtp.sendgrid.net',
+    :port                 => '587',
+    :domain               => 'heroku.com',
+    :user_name            => ENV['SENDGRID_USERNAME'],
+    :password             => ENV['SENDGRID_PASSWORD'],
+    :authentication       => :plain,
+    :enable_starttls_auto => true
+  }
 end
 
 helpers do
@@ -33,14 +47,27 @@ helpers do
   # @see http://www.pubnub.com/tutorial/developer-intro-tutorial
   # @see https://pusher.tenderapp.com/kb/publishingtriggering-events/what-is-the-message-size-limit-when-publishing-a-message
   def push(headers)
-    message = (headers + ['', request.body.read]).join("\r\n")
+    body    = request.body.read
+    headers = headers.join("\r\n")
+    message = "#{headers}\r\n#{body}"
 
     if Encoding.list.map(&:name).include?(@channel)
-      message = message.force_encoding(@channel)
+      body = body.force_encoding(@channel)
     end
 
-    message.chars.each_slice(10_000).each_with_index do |chars,index|
-      Pusher[@channel].trigger(index.zero? ? 'begin' : 'continue', :content => chars.join)
+    if params[:email]
+      Mail.deliver do
+        to '@todo'
+        from '@todo'
+        subject 'RackBin'
+        body 'Attached'
+        add_file :filename => 'headers.txt', :content => headers
+        add_file :filename => 'body.txt', :content => body
+      end
+    else
+      message.chars.each_slice(10_000).each_with_index do |chars,index|
+        Pusher[@channel].trigger(index.zero? ? 'begin' : 'continue', :content => chars.join)
+      end
     end
   end
 end
