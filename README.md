@@ -25,7 +25,7 @@
 * You can POST and listen for requests at any URL path. For example, `/foo` displays only POST requests to `/foo`, making it easy to isolate requests from different services.
 * `/rack` is a special path that displays HTTP headers as environment variables (and displays only POST requests to `/rack`). Useful if you are testing webhooks to be consumed by Rack apps.
 * Rackbin is less than 100 lines of code, all in [`config.ru`](https://github.com/opennorth/rackbin/blob/master/config.ru), making it easy to tailor to your needs.
-* If you must send non-ASCII, non-UTF-8 POST requests, send your request to the appropriate, case-sensitive path below (otherwise, RackBin will silently fail):
+* If you must send non-ASCII, non-UTF-8 POST requests, send your request to the appropriate, case-sensitive path below (otherwise, Rackbin will silently fail):
 
     ASCII-8BIT
     UTF-8
@@ -135,7 +135,7 @@ In most cases, you are probably better served by [Requestb.in](http://requestb.i
 
 ## Caveats
 
-* RackBin uses [Pusher](http://pusher.com/), which sends messages in 10kB chunks. Sending a large POST (>1MB) is therefore not recommended. (Pusher is used to avoid database maintenance. Rackbin stores no data.)
+* Rackbin uses [Pusher](http://pusher.com/), which sends messages in 10kB chunks. Sending a large POST (>1MB) is therefore not recommended. (Pusher is used to avoid database maintenance. Rackbin stores no data.)
 * URL paths should contain only upper- and lowercase letters, numbers and the following punctuation `_ - = @ , . ;`. The `/` path separator is converted to `_`. All other characters are ignored. As such, `/foo!` displays the same POSTs as `/foo`.
 * `/requests` is the default bin, therefore `/` displays the same POSTs as `/requests`.
 

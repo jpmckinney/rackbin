@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    dalli (2.6.2)
     multi_json (1.7.3)
     oj (2.0.12)
     pusher (0.11.3)
@@ -20,6 +21,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dalli
   oj
   pusher
   sinatra
