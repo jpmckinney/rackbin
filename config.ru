@@ -16,7 +16,10 @@ end
 helpers do
   # @return [Dalli::Client] a Memcache client
   def client
-    @client ||= Dalli::Client.new
+    @client ||= Dalli::Client.new(ENV['MEMCACHIER_SERVERS'], {
+      :username => ENV['MEMCACHIER_USERNAME'],
+      :password => ENV['MEMCACHIER_PASSWORD'],
+    })
   end
 
   def requests
