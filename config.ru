@@ -123,7 +123,7 @@ __END__
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="<%= charset %>">
+<meta charset="<%= charset.downcase %>">
 <title>Rackbin</title>
 </head>
 <body>
