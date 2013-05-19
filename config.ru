@@ -138,12 +138,15 @@ __END__
 <script>
 var pusher = new Pusher('<%= Pusher.key %>');
 var channel = pusher.subscribe('<%= @channel %>');
+function escape(string) {
+  return string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, "&#039;");
+}
 channel.bind('begin', function (data) {
-  document.write('<hr><pre>' + data.content.replace(/&/g, '&amp;') + '</pre>');
+  document.write('<hr><pre>' + escape(data.content) + '</pre>');
 });
 channel.bind('continue', function (data) {
   var tags = document.getElementsByTagName('pre');
-  tags[tags.length - 1].innerHTML += data.content.replace(/&/g, '&amp;');
+  tags[tags.length - 1].innerHTML += escape(data.content);
 });
 </script>
 <p>Send a POST request to this URL to start!</p>
