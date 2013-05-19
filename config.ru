@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'bundler/setup'
 
+require 'cgi'
+
 require 'dalli'
 require 'pusher'
 require 'sinatra'
@@ -151,8 +153,9 @@ channel.bind('continue', function (data) {
 <% requests.each do |request| %>
 <hr>
 <pre>
-<%= request['headers']%>
+<%= CGI.escapeHTML(request['headers']) %>
 
-<%= request['body'] %>
+
+<%= CGI.escapeHTML(request['body']) %>
 </pre>
 <% end %>
