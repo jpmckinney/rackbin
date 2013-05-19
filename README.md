@@ -7,6 +7,7 @@
 * [Sign up for a Heroku account](https://id.heroku.com/signup)
 * [Download the Heroku Toolbelt](https://toolbelt.heroku.com/)
 * Deploy to Heroku  
+
         git clone https://github.com/opennorth/rackbin.git
         cd rackbin
         heroku create
@@ -14,6 +15,7 @@
         git push heroku master
 
 * Open your bin's URL and wait for requests  
+
         heroku open
 
 * POST requests to your bin's URL
