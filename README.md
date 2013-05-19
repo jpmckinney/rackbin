@@ -6,23 +6,21 @@
 
 * [Sign up for a Heroku account](https://id.heroku.com/signup)
 * [Download the Heroku Toolbelt](https://toolbelt.heroku.com/)
-* Deploy to Heroku
-
+* Deploy to Heroku  
         git clone https://github.com/opennorth/rackbin.git
         cd rackbin
         heroku create
         heroku addons:add pusher:sandbox
         git push heroku master
 
-* Open your bin's URL and wait for requests
-
+* Open your bin's URL and wait for requests  
         heroku open
 
 * POST requests to your bin's URL
 
 ## Features
 
-* You can POST and listen for requests at any URL path. For example, `/foo` displays only POST requests to `/foo`, making it easy to isolate requests from different services. You must have the bin's page open in your browser before POST requests are sent.
+* You can POST and listen for requests at any URL path. For example, `/foo` displays only POST requests to `/foo`, making it easy to isolate requests. You must have the bin's page open in your browser before POST requests are sent.
 * `/rack` is a special path that displays HTTP headers as environment variables (and displays only POST requests to `/rack`). Useful if you are testing webhooks to be consumed by Rack apps.
 * Rackbin is less than 100 lines of code, all in [`config.ru`](https://github.com/opennorth/rackbin/blob/master/config.ru), making it easy to tailor to your needs.
 * If you must send non-ASCII, non-UTF-8 POST requests, send your request to the appropriate, case-sensitive path below (otherwise, Rackbin will silently fail). Unlike other paths, you must refresh the bin's page after POST requests are sent. You may need to change your browser's encoding.
