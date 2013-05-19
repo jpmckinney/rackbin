@@ -1,6 +1,6 @@
 # Rackbin: The simplest possible Rack postbin
 
-[Requestb.in](http://requestb.in/) is great, except it limits requests to 10,240 bytes, and you can't choose your URL path. This postbin, or "requestbin", is easy to install and customize, has no limits and uses any URL path. Just open your bin's URL and wait for the requests!
+[Requestb.in](http://requestb.in/) is great, except it limits requests to 10,240 bytes, you can't choose your URL path, and it can't handle non-ASCII, non-UTF8 POST requests. This postbin, or "requestbin", is easy to install and customize, has no limits, uses any URL path and accepts all encodings. Just open your bin's URL and wait for the requests!
 
 ## Getting Started
 
@@ -25,7 +25,7 @@
 * You can POST and listen for requests at any URL path. For example, `/foo` displays only POST requests to `/foo`, making it easy to isolate requests from different services. You must have the bin's page open in your browser before POST requests are sent.
 * `/rack` is a special path that displays HTTP headers as environment variables (and displays only POST requests to `/rack`). Useful if you are testing webhooks to be consumed by Rack apps.
 * Rackbin is less than 100 lines of code, all in [`config.ru`](https://github.com/opennorth/rackbin/blob/master/config.ru), making it easy to tailor to your needs.
-* If you must send non-ASCII, non-UTF-8 POST requests, send your request to the appropriate, case-sensitive path below (otherwise, Rackbin will silently fail). Unlike other paths, you must refresh the bin's page after POST requests are sent.
+* If you must send non-ASCII, non-UTF-8 POST requests, send your request to the appropriate, case-sensitive path below (otherwise, Rackbin will silently fail). Unlike other paths, you must refresh the bin's page after POST requests are sent. You may need to change your browser's encoding.
 
         ASCII-8BIT
         Big5
