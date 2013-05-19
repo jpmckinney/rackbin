@@ -22,8 +22,18 @@ helpers do
     })
   end
 
+  # @return [Array<Hash>] a list of POST requests
   def requests
     client.get(@channel) || []
+  end
+
+  # @return [String] the expected encoding
+  def charset
+    if encoded?
+      @channel
+    else
+      'UTF-8'
+    end
   end
 
   # @see http://pusher.com/docs/client_api_guide/client_channels#naming-channels
@@ -113,7 +123,7 @@ __END__
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset="<%= charset %>">
 <title>Rackbin</title>
 </head>
 <body>
@@ -137,6 +147,7 @@ channel.bind('continue', function (data) {
 <p>Send a POST request to this URL to start!</p>
 
 @@dalli
+<p>Send a POST request to this URL to start!</p>
 <% requests.each do |request| %>
 <hr>
 <pre>
