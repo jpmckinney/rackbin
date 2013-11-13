@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
 gem 'dalli'
-gem 'oj'
 gem 'pusher'
-gem 'sinatra'
+gem 'sinatra', '~> 1.0.0'

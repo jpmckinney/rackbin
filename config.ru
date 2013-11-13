@@ -16,6 +16,32 @@ unless ENV['PUSHER_URL']
 end
 
 helpers do
+  # @see http://pusher.com/docs/client_api_guide/client_channels#naming-channels
+  def channel
+    @channel ||= begin
+      path = params[:splat].join
+      if path.empty?
+        'requests' # default
+      else
+        path.gsub('/', '_').gsub(/[^A-Za-z0-9,.;=@_-]/, '')
+      end
+    end
+  end
+
+  # @return [Boolean] whether the request is expected to be non-UTF8
+  def encoded?
+    Encoding.list.map(&:name).include?(channel)
+  end
+
+  # @return [String] the expected encoding
+  def charset
+    if encoded?
+      channel
+    else
+      'UTF-8'
+    end
+  end
+
   # @return [Dalli::Client] a Memcache client
   def client
     @client ||= Dalli::Client.new(ENV['MEMCACHIER_SERVERS'], {
@@ -26,26 +52,7 @@ helpers do
 
   # @return [Array<Hash>] a list of POST requests
   def requests
-    client.get(@channel) || []
-  end
-
-  # @return [String] the expected encoding
-  def charset
-    if encoded?
-      @channel
-    else
-      'UTF-8'
-    end
-  end
-
-  # @see http://pusher.com/docs/client_api_guide/client_channels#naming-channels
-  def set_channel
-    path = params[:splat].join
-    @channel = if path.empty?
-      'requests' # default
-    else
-      path.gsub('/', '_').gsub(/[^A-Za-z0-9,.;=@_-]/, '')
-    end
+    client.get(channel) || []
   end
 
   # @return [Hash] the request's HTTP headers
@@ -53,11 +60,6 @@ helpers do
     request.env.select do |key,_|
       key[/\A(?:HTTP_|CONTENT_)/]
     end
-  end
-
-  # @return [Boolean] whether the request is expected to be non-UTF8
-  def encoded?
-    Encoding.list.map(&:name).include?(@channel)
   end
 
   # @params [Array<String>] headers the request's HTTP headers
@@ -69,17 +71,17 @@ helpers do
     body = request.body.read
 
     if encoded?
-      client.set(@channel, requests.push({
+      client.set(channel, requests.push({
         'headers' => headers.join("\r\n"),
-        'body' => body.force_encoding(@channel),
+        'body' => body.force_encoding(channel),
       }), 172_800) # 2 days
     else
-      message = (headers + ['', body]).join("\r\n")
       # Pusher has a maximum message length of 10kB (PubNub is 1800 bytes).
-      # @see http://www.pubnub.com/tutorial/developer-intro-tutorial
       # @see https://pusher.tenderapp.com/kb/publishingtriggering-events/what-is-the-message-size-limit-when-publishing-a-message
+      # @see https://help.pubnub.com/entries/21100116-How-Many-Characters-Fit-into-One-Message-
+      message = (headers + ['', body]).join("\r\n")
       message.chars.each_slice(10_000).each_with_index do |chars,index|
-        Pusher[@channel].trigger(index.zero? ? 'begin' : 'continue', :content => chars.join)
+        Pusher[channel].trigger(index.zero? ? 'begin' : 'continue', :content => chars.join)
       end
     end
   end
@@ -94,7 +96,6 @@ post '/rack' do
 end
 
 post '/*' do
-  set_channel
   headers = http_headers.map do |key,value|
     "#{key.sub(/\AHTTP_/, '').gsub('_', '-').downcase.gsub(/\b([a-z])/) {$1.capitalize}}: #{value}"
   end
@@ -109,8 +110,18 @@ get '/favicon.ico' do
   204
 end
 
+get '/*/download' do
+  if encoded?
+    cache_control :no_cache, :max_age => 0
+    attachment "#{channel}.txt"
+    content_type "text/plain; charset=#{charset}"
+    erb :download, :layout => false
+  else
+    404
+  end
+end
+
 get '/*' do
-  set_channel
   if encoded?
     erb :dalli
   else
@@ -137,7 +148,7 @@ __END__
 <script src="//js.pusher.com/2.0/pusher.min.js"></script>
 <script>
 var pusher = new Pusher('<%= Pusher.key %>');
-var channel = pusher.subscribe('<%= @channel %>');
+var channel = pusher.subscribe('<%= channel %>');
 function escape(string) {
   return string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, "&#039;");
 }
@@ -149,10 +160,14 @@ channel.bind('continue', function (data) {
   tags[tags.length - 1].innerHTML += escape(data.content);
 });
 </script>
-<p>Send a POST request to this URL to start!</p>
+<p>Send a POST request to this URL for your inspection.</p>
 
 @@dalli
-<p>Send a POST request to this URL to start!</p>
+<% if requests.empty? %>
+<p>Send a POST request to this URL then refresh this page.</p>
+<% else %>
+<p><a href="/<%= channel %>/download">Download all requests</a></p>
+<% end %>
 <% requests.each do |request| %>
 <hr>
 <pre>
@@ -161,4 +176,14 @@ channel.bind('continue', function (data) {
 
 <%= CGI.escapeHTML(request['body']) %>
 </pre>
+<% end %>
+
+@@download
+<% requests.each do |request| %>
+--------------------------------------------------------------------------------
+
+<%= CGI.escapeHTML(request['headers']) %>
+
+
+<%= CGI.escapeHTML(request['body']) %>
 <% end %>
