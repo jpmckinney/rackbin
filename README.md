@@ -1,4 +1,4 @@
-# Rackbin: The simplest possible Rack postbin
+# Rackbin: Simplest possible Rack postbin
 
 [Requestb.in](http://requestb.in/) is great, except it limits requests to 10,240 bytes, you can't choose your URL path, and it can't handle non-ASCII, non-UTF8 POST requests. This postbin, or "requestbin", is easy to install and customize, has no limits, uses any URL path and accepts all encodings. Just open your bin's URL and wait for the requests!
 
@@ -8,7 +8,7 @@
 * [Download the Heroku Toolbelt](https://toolbelt.heroku.com/)
 * Deploy to Heroku  
 
-        git clone https://github.com/opennorth/rackbin.git
+        git clone https://github.com/jpmckinney/rackbin.git
         cd rackbin
         heroku create
         heroku addons:add pusher:sandbox
@@ -24,7 +24,7 @@
 
 * You can POST and listen for requests at any URL path. For example, `/foo` displays only POST requests to `/foo`, making it easy to isolate requests. You must have the bin's page open in your browser before POST requests are sent.
 * `/rack` is a special path that displays HTTP headers as environment variables (and displays only POST requests to `/rack`). Useful if you are testing webhooks to be consumed by Rack apps.
-* Rackbin is less than 200 lines of code, all in [`config.ru`](https://github.com/opennorth/rackbin/blob/master/config.ru), making it easy to tailor to your needs.
+* Rackbin is less than 200 lines of code, all in [`config.ru`](https://github.com/jpmckinney/rackbin/blob/master/config.ru), making it easy to tailor to your needs.
 * If you must send non-ASCII, non-UTF-8 POST requests, send your request to the appropriate, case-sensitive path below (otherwise, Rackbin will silently fail). Unlike other paths, you must refresh the bin's page after POST requests are sent. You may need to change your browser's encoding.
 
         ASCII-8BIT
@@ -140,8 +140,4 @@ In most cases, you are probably better served by [Requestb.in](http://requestb.i
 * URL paths should contain only upper- and lowercase letters, numbers and the following punctuation `_ - = @ , . ;`. The `/` path separator is converted to `_`. All other characters are ignored. As such, `/foo!` displays the same POSTs as `/foo`.
 * `/requests` is the default bin, therefore `/` displays the same POSTs as `/requests`.
 
-## Bugs? Questions?
-
-This project's main repository is on GitHub: [http://github.com/opennorth/rackbin](http://github.com/opennorth/rackbin), where your contributions, forks, bug reports, feature requests, and feedback are greatly welcomed.
-
-Copyright (c) 2013 Open North Inc., released under the MIT license
+Copyright (c) 2013 James McKinney, released under the MIT license
