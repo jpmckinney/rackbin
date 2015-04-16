@@ -1,15 +1,22 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    dalli (2.6.2)
-    multi_json (1.7.3)
-    pusher (0.11.3)
+    dalli (2.7.4)
+    httpclient (2.6.0.1)
+    multi_json (1.11.0)
+    pusher (0.14.4)
+      httpclient (~> 2.5)
       multi_json (~> 1.0)
-      signature (~> 0.1.6)
-    rack (1.5.2)
-    signature (0.1.7)
-    sinatra (1.0)
-      rack (>= 1.0)
+      signature (~> 0.1.8)
+    rack (1.6.0)
+    rack-protection (1.5.3)
+      rack
+    signature (0.1.8)
+    sinatra (1.4.6)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
+    tilt (2.0.1)
 
 PLATFORMS
   ruby
@@ -17,4 +24,4 @@ PLATFORMS
 DEPENDENCIES
   dalli
   pusher
-  sinatra (~> 1.0.0)
+  sinatra
