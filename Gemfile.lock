@@ -3,12 +3,12 @@ GEM
   specs:
     dalli (2.7.4)
     httpclient (2.6.0.1)
-    multi_json (1.11.0)
+    multi_json (1.11.1)
     pusher (0.14.5)
       httpclient (~> 2.5)
       multi_json (~> 1.0)
       signature (~> 0.1.8)
-    rack (1.6.1)
+    rack (1.6.2)
     rack-protection (1.5.3)
       rack
     signature (0.1.8)
