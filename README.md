@@ -11,7 +11,7 @@
 ```
 git clone https://github.com/jpmckinney/rackbin.git
 cd rackbin
-heroku create
+heroku apps:create
 heroku addons:add pusher:sandbox
 git push heroku master
 ```
